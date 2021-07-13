@@ -3,24 +3,24 @@ const data = require('./data.js');
 const { VK } = require('vk-io');
 
 let ACCESS_TOKEN = "";
+let config = {};
 if(!fs.existsSync("./config.json")){
     console.log("Первоначальная настройка!")
     const readlineSync = require('readline-sync');
-    console.log("Введите access token: ")
-    ACCESS_TOKEN = readlineSync.question("", {
+
+    process.stdout.write("Введите access token: ");
+    config.access_token = readlineSync.question("", {
         charset: "UTF-8"
     });
 
-    fs.writeFileSync("./config.json", JSON.stringify({
-        access_token: ACCESS_TOKEN
-    }));
+    fs.writeFileSync("./config.json", JSON.stringify(config));
 }else{
-    let config = JSON.parse(fs.readFileSync("./config.json", 'utf8'));
-    ACCESS_TOKEN = config.access_token;
+    config = JSON.parse(fs.readFileSync("./config.json", 'utf8'));
 }
 
 const vk = new VK({
-    token: ACCESS_TOKEN
+    token: config.access_token,
+    apiBaseUrl: "https://vk-api-proxy.xtrafrancyz.net/method"
 });
 
 vk.replaceMessage = async (message, text) => {
