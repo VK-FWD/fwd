@@ -13,6 +13,16 @@ if(!fs.existsSync("./config.json")){
         charset: "UTF-8"
     });
 
+    process.stdout.write("Нужен ли proxy? [no]: ");
+    if(readlineSync.question("", {charset: "UTF-8"}).toLowerCase()==="yes"){
+        process.stdout.write("Введите proxy [https://vk-api-proxy.xtrafrancyz.net]: ");
+        let proxy = readlineSync.question("", {charset: "UTF-8"})
+        if(proxy.length===0) proxy = "https://vk-api-proxy.xtrafrancyz.net/method"
+        else proxy += "/method"
+
+        config.apiUrl = proxy
+    }
+
     fs.writeFileSync("./config.json", JSON.stringify(config));
 }else{
     config = JSON.parse(fs.readFileSync("./config.json", 'utf8'));
@@ -20,7 +30,7 @@ if(!fs.existsSync("./config.json")){
 
 const vk = new VK({
     token: config.access_token,
-    apiBaseUrl: "https://vk-api-proxy.xtrafrancyz.net/method"
+    apiBaseUrl: config.apiUrl||"https://api.vk.com/method"
 });
 
 vk.replaceMessage = async (message, text) => {
