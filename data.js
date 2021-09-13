@@ -42,8 +42,8 @@ class Data {
         for(let moduleName in this.modules)
             if(this.modules.hasOwnProperty(moduleName)&&moduleName!=="system"){
                 const module = this.modules[moduleName]
-                if(!fs.existsSync("./data/"+moduleName+"/"))
-                    fs.mkdirSync("./data/"+moduleName+"")
+                if(!fs.existsSync("./modules/"+moduleName+"/"))
+                    fs.mkdirSync("./modules/"+moduleName+"")
 
                 if(module.startUp!==undefined)
                     setTimeout(() => module.startUp(this, "./data/"+moduleName+""), 0);
